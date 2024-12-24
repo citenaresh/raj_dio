@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raj HTML Radio</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c2c2c">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #2c2c2c;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .radio-container {
+            text-align: center;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+            width: 90%;
+            max-width: 400px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .station-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Status Section */
+        .status-section {
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        #status-button {
+            background: #00d9ff;
+            border: none;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 1.2em;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        #status-button:hover {
+            background: #0099cc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="radio-container">
+        <!-- Buttons for Radio Stations -->
+        <div class="station-buttons">
+            <button id="btn-kantipur" onclick="fn_Kantipur()">Kantipur</button>
+            <button id="btn-synergy" onclick="fn_Synergy()">Synergy</button>
+            <button id="btn-ujyaalo" onclick="fn_Ujyaalo()">Ujyaalo</button>
+            <button id="btn-abc" onclick="fn_ABC()">ABC</button>
+            <button id="btn-sixpr" onclick="fn_SixPR()">6PR Perth</button>
+            <button id="btn-popdesi" onclick="fn_PopDesi()">Pop Desi</button>
+        </div>
+
+        <!-- Station Name and Status -->
+        <div class="status-section">
+            <button id="status-button" onclick="togglePlayPause()">
+                <span class="station-name">Station Name</span>
+                <span class="status">Status: Paused</span>
+            </button>
+        </div>
+    </div>
+    <div id="hidAudioDiv"></div>
+
+    <script>
+        // Array of audio data
+        const audioData = [
+            { id: "kantipur", name: "Kantipur", src: "https://radio-broadcast.ekantipur.com/stream" },
+            { id: "synergy", name: "Synergy", src: "https://live.itech.host:3880/stream" },
+            { id: "ujyaalo", name: "Ujyaalo", src: "http://stream.zenolive.com/wtuvp08xq1duv" },
+            { id: "ABC", name: "ABC", src: "https://mediaserviceslive.akamaized.net/hls/live/2038311/newsradio/index.m3u8" },
+            { id: "sixPR", name: "6PR", src: "https://playerservices.streamtheworld.com/api/livestream-redirect/6PR.mp3" },
+            { id: "popdesi", name: "Pop-Desi", src: "http://sbs-ice.streamguys1.com/sbs-popdesi" }
+        ];
+
+        // Function to create and append audio elements
+        function createAudioElements() {
+            const hidAudioDiv = document.getElementById('hidAudioDiv');
+            audioData.forEach(audio => {
+                const audioElement = document.createElement('audio');
+                audioElement.className = 'radAudio';
+                audioElement.id = audio.id;
+                audioElement.src = audio.src;
+                audioElement.controls = true;
+                audioElement.autoplay = true;
+                audioElement.muted = true;
+                audioElement.style.display = 'none';
+                hidAudioDiv.appendChild(audioElement);
+            });
+        }
+
+        // Call the function to create audio elements
+        createAudioElements();
+
+        let stnIndex = -1;
+        const radStations = document.getElementsByClassName("radAudio");
+        const statusButton = document.getElementById('status-button');
+        const stationNameElement = statusButton.querySelector('.station-name');
+        const statusElement = statusButton.querySelector('.status');
+
+        function muteAll() {
+            for (let i = 0; i < radStations.length; i++) {
+                radStations[i].muted = true;
+            }
+        }
+
+        function unMuteOne(refIndex) {
+            muteAll();
+            radStations[refIndex].muted = false;
+            stationNameElement.innerText = audioData[refIndex].name;
+            statusElement.innerText = "Status: Playing";
+        }
+
+        function fn_Kantipur() {
+            stnIndex = 0;
+            unMuteOne(stnIndex);
+        }
+
+        function fn_Synergy() {
+            stnIndex = 1;
+            unMuteOne(stnIndex);
+        }
+
+        function fn_Ujyaalo() {
+            stnIndex = 2;
+            unMuteOne(stnIndex);
+        }
+
+        function fn_ABC() {
+            stnIndex = 3;
+            unMuteOne(stnIndex);
+        }
+
+        function fn_SixPR() {
+            stnIndex = 4;
+            unMuteOne(stnIndex);
+        }
+
+        function fn_PopDesi() {
+            stnIndex = 5;
+            unMuteOne(stnIndex);
+        }
+
+        function togglePlayPause() {
+            if (stnIndex !== -1) {
+                if (radStations[stnIndex].muted) {
+                    radStations[stnIndex].muted = false;
+                    statusElement.innerText = "Status: Playing";
+                } else {
+                    radStations[stnIndex].muted = true;
+                    statusElement.innerText = "Status: Paused";
+                }
+            }
+        }
+
+        // Add an event listener to handle the first user interaction
+        document.body.addEventListener('click', () => {
+            for (let i = 0; i < radStations.length; i++) {
+                radStations[i].play();
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
