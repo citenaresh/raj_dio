@@ -2,69 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raj HTML Radio</title>
-    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#2c2c2c">
+    <title>Raj HTML Radio</title>
     <style>
         body, html {
             height: 100%;
-            margin: 0;
+            width: 100%;
             font-family: Arial, sans-serif;
             background: #2c2c2c;
             color: white;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
         }
 
         .radio-container {
             text-align: center;
             background: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
-            width: 90%;
-            max-width: 400px;
-            box-sizing: border-box;
+            padding: 0;  /* Remove padding */
+            border-radius: 0;  /* Remove border-radius */
+            box-shadow: none;  /* Remove box-shadow */
+            width: 100vw; /* Full width */
+            height: 100vh; /* Full height */
+            box-sizing: border-box; /* Include padding in height calculation */
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
+            margin: 0; /* Remove any margin */
         }
 
         .station-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
-            width: 100%;
+            justify-content: center;
+            margin-bottom: 20px;
+            width: 100%; /* Ensures buttons take the full width */
         }
 
         button {
+            flex: 1 1 calc(33.333% - 10px);
+            max-width: 150px;
+            min-width: 100px;
             padding: 10px;
-            font-size: 16px;
+            font-size: 26px;
             border: none;
             border-radius: 5px;
             color: white;
             cursor: pointer;
-            transition: transform 0.2s, background-color 0.3s;
+            transition: opacity 0.3s ease;
         }
 
+        button:hover {
+            opacity: 0.8;
+        }
+
+        /* Station Button Colors */
         #btn-kantipur { background-color: #FF5733; }
         #btn-synergy { background-color: #33C3FF; }
         #btn-ujyaalo { background-color: #7D3C98; }
-        #btn-abc { background-color: #F1C40F; }
-        #btn-sixpr { background-color: #28B463; }
+        #btn-abc    { background-color: #F1C40F; }
+        #btn-sixpr  { background-color: #28B463; }
         #btn-popdesi { background-color: #E74C3C; }
-
-        button:hover {
-            transform: scale(1.05);
-        }
 
         /* Status Section */
         .status-section {
             margin: 20px 0;
             width: 100%;
+            display: flex;
+            justify-content: center;
         }
 
         #status-button {
@@ -75,11 +86,46 @@
             font-size: 1.2em;
             color: white;
             cursor: pointer;
-            width: 100%;
+            transition: background 0.3s ease;
+            width: 80%; /* Make it full width */
         }
 
         #status-button:hover {
             background: #0099cc;
+        }
+
+        .station-name {
+            font-size: 1.2em;
+            color: #ffffff;
+            display: block;
+        }
+
+        .status {
+            font-size: 1em;
+            color: #ff5733;
+            display: block;
+        }
+
+        /* Portrait mode (default) */
+        @media (orientation: portrait) {
+            .station-buttons {
+                flex-direction: column; /* Buttons in a column */
+            }
+        }
+
+        /* Landscape mode */
+        @media (orientation: landscape) {
+            .station-buttons {
+                flex-direction: row; /* Buttons in a row */
+            }
+
+            .status-section {
+                flex-direction: column;
+            }
+
+            #status-button {
+                width: 80%; /* Adjust width in landscape */
+            }
         }
     </style>
 </head>
@@ -96,7 +142,7 @@
             <button id="btn-popdesi" onclick="fn_PopDesi()">Pop Desi</button>
         </div>
 
-        <!-- Station Name and Status -->
+        <!-- Station Name and Status as a Button -->
         <div class="status-section">
             <button id="status-button" onclick="togglePlayPause()">
                 <span class="station-name">Station Name</span>
