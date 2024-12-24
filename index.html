@@ -262,6 +262,17 @@
           });
       });
     }
+
+        const logMessage = window.matchMedia('(display-mode: standalone)').matches
+    ? 'App is running in standalone mode!'
+    : 'App is running in the browser.';
+    
+  // Log message in the console
+  console.log(logMessage);
+
+  // Display the log message on the webpage
+  document.body.insertAdjacentHTML('beforeend', `<p style="color: white; background: black; padding: 10px;">${logMessage}</p>`);
+
     </script>
 </body>
 </html>
